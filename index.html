@@ -196,10 +196,39 @@
     .fu { opacity: 0; transform: translateY(16px); transition: opacity 0.55s ease, transform 0.55s ease; }
     .fu.vis { opacity: 1; transform: translateY(0); }
 
+    /* HAMBURGER */
+    .nav-toggle {
+      display: none;
+      flex-direction: column; justify-content: center; gap: 5px;
+      width: 28px; height: 28px; cursor: pointer; background: none; border: none; padding: 0;
+    }
+    .nav-toggle span {
+      display: block; width: 22px; height: 2px;
+      background: var(--text); border-radius: 2px;
+      transition: transform 0.25s ease, opacity 0.25s ease;
+    }
+    .nav-toggle.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+    .nav-toggle.open span:nth-child(2) { opacity: 0; }
+    .nav-toggle.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+    /* MOBILE MENU OVERLAY */
+    .nav-links.mobile-open {
+      display: flex; flex-direction: column; gap: 0;
+      position: fixed; top: var(--nav); left: 0; right: 0; bottom: 0;
+      background: var(--bg); z-index: 99;
+      padding: 2rem; align-items: flex-start; justify-content: flex-start;
+    }
+    .nav-links.mobile-open li { border-bottom: 1px solid var(--border); width: 100%; }
+    .nav-links.mobile-open a {
+      display: block; padding: 1rem 0;
+      font-size: 1.1rem; font-weight: 500; color: var(--text);
+    }
+
     /* RESPONSIVE */
     @media (max-width: 600px) {
       .wrap { padding: 0 1.25rem; }
       .nav-links { display: none; }
+      .nav-toggle { display: flex; }
       .also-item { grid-template-columns: 1fr; gap: 0.2rem; }
       .career-header { flex-direction: column; gap: 0.1rem; }
     }
@@ -209,7 +238,10 @@
 
 <nav>
   <a href="#hero" class="nav-name">Amogh Pachpor</a>
-  <ul class="nav-links">
+  <button class="nav-toggle" aria-label="Menu" onclick="toggleMenu()">
+    <span></span><span></span><span></span>
+  </button>
+  <ul class="nav-links" id="nav-links">
     <li><a href="#about">About</a></li>
     <li><a href="#work">Work</a></li>
     <li><a href="#career">Career</a></li>
@@ -561,6 +593,21 @@
     const idx = siblings.indexOf(el);
     if (idx > 0) el.style.transitionDelay = `${idx * 55}ms`;
     io.observe(el);
+  });
+
+  function toggleMenu() {
+    const links = document.getElementById('nav-links');
+    const toggle = document.querySelector('.nav-toggle');
+    links.classList.toggle('mobile-open');
+    toggle.classList.toggle('open');
+  }
+
+  // Close menu on link click
+  document.querySelectorAll('#nav-links a').forEach(a => {
+    a.addEventListener('click', () => {
+      document.getElementById('nav-links').classList.remove('mobile-open');
+      document.querySelector('.nav-toggle').classList.remove('open');
+    });
   });
 </script>
 
