@@ -42,7 +42,7 @@
     nav {
       position: fixed; top: 0; left: 0; right: 0; height: var(--nav);
       background: rgba(250,249,247,0.92); backdrop-filter: blur(12px);
-      border-bottom: 1px solid var(--border); z-index: 100;
+      border-bottom: 1px solid var(--border); z-index: 1000;
       display: flex; align-items: center; justify-content: space-between;
       padding: 0 2rem;
     }
@@ -215,14 +215,16 @@
     .nav-links.mobile-open {
       display: flex; flex-direction: column; gap: 0;
       position: fixed; top: var(--nav); left: 0; right: 0; bottom: 0;
-      background: var(--bg); z-index: 99;
-      padding: 2rem; align-items: flex-start; justify-content: flex-start;
+      background: var(--bg); z-index: 999;
+      padding: 1rem 2rem; align-items: flex-start; justify-content: flex-start;
+      overflow-y: auto;
     }
     .nav-links.mobile-open li { border-bottom: 1px solid var(--border); width: 100%; }
     .nav-links.mobile-open a {
       display: block; padding: 1rem 0;
       font-size: 1.1rem; font-weight: 500; color: var(--text);
     }
+    body.menu-open { overflow: hidden; }
 
     /* RESPONSIVE */
     @media (max-width: 600px) {
@@ -598,8 +600,9 @@
   function toggleMenu() {
     const links = document.getElementById('nav-links');
     const toggle = document.querySelector('.nav-toggle');
-    links.classList.toggle('mobile-open');
+    const isOpen = links.classList.toggle('mobile-open');
     toggle.classList.toggle('open');
+    document.body.classList.toggle('menu-open', isOpen);
   }
 
   // Close menu on link click
@@ -607,6 +610,7 @@
     a.addEventListener('click', () => {
       document.getElementById('nav-links').classList.remove('mobile-open');
       document.querySelector('.nav-toggle').classList.remove('open');
+      document.body.classList.remove('menu-open');
     });
   });
 </script>
