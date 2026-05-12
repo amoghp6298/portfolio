@@ -72,7 +72,7 @@
 
     /* MOBILE MENU — applied via JS, not CSS class toggle */
     .nav-links.is-open {
-      flex-direction: column; gap: 0;
+      display: flex; flex-direction: column; gap: 0;
       position: fixed; top: var(--nav); left: 0; right: 0; bottom: 0;
       background: var(--bg); z-index: 999;
       padding: 1rem 2rem; align-items: flex-start; justify-content: flex-start;
@@ -80,7 +80,7 @@
     }
     .nav-links.is-open li { border-bottom: 1px solid var(--border); width: 100%; }
     .nav-links.is-open a {
-      display: block; padding: 1rem 0;
+      display: block !important; padding: 1rem 0;
       font-size: 1.1rem; font-weight: 500; color: var(--text);
     }
     body.menu-open { overflow: hidden; }
@@ -599,32 +599,30 @@
   function toggleMenu() {
     const links = document.getElementById('nav-links');
     const toggle = document.querySelector('.nav-toggle');
-    const isOpen = links.style.display === 'flex';
+    const isOpen = links.classList.contains('is-open');
     if (isOpen) {
-      links.style.display = '';
       links.classList.remove('is-open');
+      links.style.display = 'none';
       toggle.classList.remove('open');
       document.body.classList.remove('menu-open');
     } else {
-      links.style.display = 'flex';
       links.classList.add('is-open');
+      links.style.display = '';
       toggle.classList.add('open');
       document.body.classList.add('menu-open');
     }
   }
 
-  // Close menu on link click
   document.querySelectorAll('#nav-links a').forEach(a => {
     a.addEventListener('click', () => {
       const links = document.getElementById('nav-links');
-      links.style.display = '';
       links.classList.remove('is-open');
+      links.style.display = 'none';
       document.querySelector('.nav-toggle').classList.remove('open');
       document.body.classList.remove('menu-open');
     });
   });
 
-  // Hide nav links on desktop, show on mobile via resize
   function handleResize() {
     const links = document.getElementById('nav-links');
     if (window.innerWidth > 600) {
@@ -632,9 +630,14 @@
       links.classList.remove('is-open');
       document.querySelector('.nav-toggle').classList.remove('open');
       document.body.classList.remove('menu-open');
+    } else {
+      if (!links.classList.contains('is-open')) {
+        links.style.display = 'none';
+      }
     }
   }
   window.addEventListener('resize', handleResize);
+  handleResize();
 </script>
 
 </body>
